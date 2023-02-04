@@ -136,8 +136,8 @@ public class ExpandByClick : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
-    // Vertor3 MidpointBetween(Vector3 a, Vector3 b)
-    // {
-
-    // }
+    Vector3 MidpointBetween(Vector3 a, Vector3 b)
+    {
+        return new Vector3(a.x + (b.x - a.x)/2f, a.y + (b.y - a.y)/2f, 0);
+    }
 }
