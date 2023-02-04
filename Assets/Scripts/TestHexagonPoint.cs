@@ -20,7 +20,7 @@ public class TestHexagonPoint: MonoBehaviour
     private void Update()
     {
         Vector3 testPosition = UtilsClass.GetMouseWorldPosition();
-        Debug.Log("Mouse: " + testPosition.ToString() );
+        //Debug.Log("Mouse: " + testPosition.ToString() );
         mouseMeshRenderer.material = redMat;
 
         bool inside = true;
@@ -33,9 +33,9 @@ public class TestHexagonPoint: MonoBehaviour
                 {
 
                     Vector3 dirFromURtoUC = hex.upperCorner - hex.upperRightCorner;
-                    Debug.Log("Before:" + dirFromURtoUC);
+                    //Debug.Log("Before:" + dirFromURtoUC);
                     Vector3 dotDirUR = UtilsClass.ApplyRotationToVector(dirFromURtoUC, 90);
-                    Debug.Log("After:" + dotDirUR);
+                    //Debug.Log("After:" + dotDirUR);
 
                     Vector3 dirToTestPoint = testPosition - hex.upperRightCorner;
                     float dotUR = Vector3.Dot(dotDirUR.normalized, dirToTestPoint.normalized);
