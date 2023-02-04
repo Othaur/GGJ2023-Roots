@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 5dcd6202ba940784dac9da5b572e1052
+guid: b90a6430332243c4282e45015a14bd20
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: leaves
+    second: {fileID: 2100000, guid: 8751d4ed4178b094883a8085659c96af, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: trunk
+    second: {fileID: 2100000, guid: b916e26b086e8554fb01779745a9ff48, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -42,8 +52,8 @@ ModelImporter:
     sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
