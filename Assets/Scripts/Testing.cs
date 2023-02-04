@@ -56,11 +56,11 @@ public class Testing : MonoBehaviour
 
     private void Awake()
     {
-        int width = 10;
-        int height = 6;
-        float cellSize = 11f;
+        int width = 15;
+        int height = 9;
+        float cellSize = 10f;
 
-        grid = new GridSystem<MapGridObject>(width, height, cellSize, Vector3.zero, (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
+        grid = new GridSystem<MapGridObject>(width, height, cellSize, new Vector3((width * cellSize)/-2f, ((height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
         for( int x=0; x<width; x++)
             for(int y =0; y<height; y++)
