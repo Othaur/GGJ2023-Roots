@@ -12,6 +12,7 @@ public class ExpandByClick : MonoBehaviour
     Camera cam;
 
     [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
+    [field: SerializeField, Range(0, 10f)]public float Width {get; private set;} = 1f;
     [field: SerializeField, Range(1f, 100f)]public float Buffer {get; private set;} = 10f;
 
     public Transform Target;
@@ -85,11 +86,11 @@ public class ExpandByClick : MonoBehaviour
         }
 
 
-        Debug.Log("Closest position: " + vertices[c]);
-        Debug.Log("Closest index: " + c);
-        Debug.Log("2nd Closest position: " + vertices[c2]);
-        Debug.Log("2nd Closest index: " + c2);
-        Debug.Log("Vertex 0: " + vertices[0]);
+        // Debug.Log("Closest position: " + vertices[c]);
+        // Debug.Log("Closest index: " + c);
+        // Debug.Log("2nd Closest position: " + vertices[c2]);
+        // Debug.Log("2nd Closest index: " + c2);
+        // Debug.Log("Vertex 0: " + vertices[0]);
 
         for (int u = 0; u < uvs.Length; u++)
         {
@@ -133,6 +134,10 @@ public class ExpandByClick : MonoBehaviour
 
 
         mesh.RecalculateBounds();
-
     }
+
+    // Vertor3 MidpointBetween(Vector3 a, Vector3 b)
+    // {
+
+    // }
 }
