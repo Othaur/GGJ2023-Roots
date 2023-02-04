@@ -9,7 +9,7 @@ public class GridSystem <TGridObject>
     private int width;
     private int height;
     private TGridObject[,] gridArray;
-    private TextMesh[,] debugTextArray;
+    //private TextMesh[,] debugTextArray;
     private float cellSize;
     private Vector3 origin;
     public bool showDebug;
@@ -31,7 +31,7 @@ public class GridSystem <TGridObject>
         this.origin = origin;
 
         gridArray = new TGridObject[width, height];
-        debugTextArray = new TextMesh[width, height];
+        //debugTextArray = new TextMesh[width, height];
 
         for(int x=0; x<gridArray.GetLength(0); x++)
             for(int y=0; y<gridArray.GetLength(1); y++)
@@ -58,18 +58,48 @@ public class GridSystem <TGridObject>
 
     public Vector3 GetWorldPosition(int x, int y)
     {
-        return 
+        return
             new Vector3(x, 0) * cellSize +
-            new Vector3(0,y) * cellSize * HEX_VERT_OFFSET +
-           ( (y%2)==1 ? new Vector3(1,0,0) * cellSize *0.5f: Vector3.zero)
+            new Vector3(0, y) * cellSize * HEX_VERT_OFFSET +
+           ((Mathf.Abs(y) % 2) == 1 ? new Vector3(1, 0, 0) * cellSize * 0.5f : Vector3.zero)
             + origin;
     }
 
      public void GetXY(Vector3 worldPosition, out int x, out int y)
     {
         Vector3 temp = worldPosition - origin;
-        x = Mathf.FloorToInt(temp.x / cellSize);
-        y = Mathf.FloorToInt(temp.y / cellSize);
+        int roughX = Mathf.RoundToInt(temp.x / cellSize);
+        int roughY = Mathf.RoundToInt(temp.y / cellSize / HEX_VERT_OFFSET);
+
+        Vector3Int roughXY = new Vector3Int(roughX, roughY);
+
+        bool oddRow = roughY % 2 == 1;
+
+        List<Vector3Int> neighbourList = new List<Vector3Int>
+        {
+            roughXY + new Vector3Int(-1,0),
+        roughXY + new Vector3Int(1, 0),
+
+        roughXY + new Vector3Int(oddRow? -1: 1, 1),
+        roughXY + new Vector3Int(0, 1),
+
+        roughXY + new Vector3Int(oddRow? -1:1, -1),
+        roughXY + new Vector3Int(0, -1),
+        };
+
+        Vector3Int closestXY = roughXY;
+
+        foreach (Vector3Int neighbour in neighbourList)
+        {
+            if (Vector3.Distance(worldPosition, GetWorldPosition(neighbour.x, neighbour.y)) <
+                    Vector3.Distance(worldPosition, GetWorldPosition(closestXY.x, closestXY.y)))
+            {
+                closestXY = neighbour;
+            }
+        }
+        Debug.DrawLine(GetWorldPosition(closestXY.x, closestXY.y), UtilsClass.GetMouseWorldPosition());
+        x = closestXY.x;
+        y = closestXY.y;
     }
 
     public void SetGridObject(int x, int y, TGridObject value)

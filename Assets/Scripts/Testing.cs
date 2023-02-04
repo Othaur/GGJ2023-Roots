@@ -6,7 +6,7 @@ using CodeMonkey.Utils;
 public class Testing : MonoBehaviour
 {
     private GridSystem<MapGridObject> grid;
-  //  private MapGridObject lastGridObject;
+    private MapGridObject lastGridObject;
  // [SerializeField] Transform pfHex;
     [SerializeField] Transform testTransform;
 
@@ -14,7 +14,17 @@ public class Testing : MonoBehaviour
     {
         GridSystem<MapGridObject> grid;
         int x, y;
-        Transform transform;
+        public Transform visualTransform;
+
+        public void Show()
+        {
+            visualTransform.Find("Selected").gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            visualTransform.Find("Selected").gameObject.SetActive(false);
+        }
 
         public MapGridObject(GridSystem<MapGridObject> grid, int x, int y)
         {
@@ -25,36 +35,21 @@ public class Testing : MonoBehaviour
 
         public void SetTransform(Transform transform)
         {
-            this.transform = transform;
+            this.visualTransform = transform;
             grid.TriggerGridObjectChanged(x, y);
         }
 
         public void ClearTransform()
         {
-            transform = null;
+            visualTransform = null;
         }
 
         public bool CanBuild()
         {
-            return transform == null;
+            return visualTransform == null;
         }
 
     }
-
-    //private class TestingObject
-    //{
-    //    public Transform visualTransform;
-
-    //    public void Show()
-    //    {
-    //        visualTransform.Find("Selected").gameObject.SetActive(true);
-    //    }
-
-    //    public void Hide()
-    //    {
-    //        visualTransform.Find("Selected").gameObject.SetActive(false);
-    //    }
-    //}
 
     private void Awake()
     {
@@ -67,9 +62,9 @@ public class Testing : MonoBehaviour
         for( int x=0; x<width; x++)
             for(int y =0; y<height; y++)
             {
-                //Transform visualTransform = Instantiate(Test, grid.GetWorldPosition(x, y), Quaternion.identity);
-              //  grid.GetGridObject(x, y).visualTransform = visualTransform;
-             //   grid.GetGridObject(x.y).Hide();
+               Transform visualTransform =  Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
+                grid.GetGridObject(x, y).visualTransform = visualTransform;
+                grid.GetGridObject(x,y).Hide();
             }
     }
     private void Start()
@@ -80,27 +75,32 @@ public class Testing : MonoBehaviour
 
     private void Update()
     {
+        Debug.DrawLine(Vector3.zero, UtilsClass.GetMouseWorldPosition());
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
-
-            MapGridObject gridObject = grid.GetGridObject(x,y);
-            if (gridObject.CanBuild())
-            {
-                Transform buildTransform = Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
-                gridObject.SetTransform(buildTransform);
-            }
-            
-        }
-        //if (lastGridObject != null)
+        //if (Input.GetMouseButtonDown(0))
         //{
-        //    lastGridObject.Hide();
+        //    grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
+
+        //    MapGridObject gridObject = grid.GetGridObject(x,y);
+        //    if (gridObject.CanBuild())
+        //    {
+        //        Transform buildTransform = Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
+        //        gridObject.SetTransform(buildTransform);
+        //    }
+
         //}
+        if (lastGridObject != null)
+        {
+            lastGridObject.Hide();
+        }
 
-        //lastGridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
-
-        //lastGridObject.Show();
+        lastGridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
+        
+        if (lastGridObject != null)
+        {
+            Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + lastGridObject.visualTransform.position);
+            lastGridObject.Show();
+        }
     }
 }
 
