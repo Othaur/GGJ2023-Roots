@@ -121,6 +121,7 @@ public class GridSystem <TGridObject>
 
         GetXY(worldPosition, out x, out y);
         SetGridObject(x, y, value);
+        Debug.Log("ITem added");
     }
 
     public TGridObject GetGridObject(int x, int y)

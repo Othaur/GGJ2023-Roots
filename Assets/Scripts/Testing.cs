@@ -19,11 +19,14 @@ public class Testing : MonoBehaviour
         public void Show()
         {
             visualTransform.Find("Selected").gameObject.SetActive(true);
+            visualTransform.Find("Hex").gameObject.SetActive(false);
+            //Debug.Log("Showing cell");
         }
 
         public void Hide()
         {
             visualTransform.Find("Selected").gameObject.SetActive(false);
+            visualTransform.Find("Hex").gameObject.SetActive(true);
         }
 
         public MapGridObject(GridSystem<MapGridObject> grid, int x, int y)
@@ -75,7 +78,8 @@ public class Testing : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawLine(Vector3.zero, UtilsClass.GetMouseWorldPosition());
+        Vector3 worldPos = UtilsClass.GetMouseWorldPosition();
+        Debug.DrawLine(Vector3.zero, worldPos);
 
         //if (Input.GetMouseButtonDown(0))
         //{
@@ -93,8 +97,10 @@ public class Testing : MonoBehaviour
         {
             lastGridObject.Hide();
         }
-
-        lastGridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
+        int x, y;
+        Debug.Log("Object:" + grid.GetWorldPosition(Mathf.RoundToInt(worldPos.x),Mathf.RoundToInt( worldPos.y)).ToString());
+        lastGridObject = grid.GetGridObject(worldPos);
+        
         
         if (lastGridObject != null)
         {
