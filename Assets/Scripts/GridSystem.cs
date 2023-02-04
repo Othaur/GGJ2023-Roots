@@ -14,6 +14,8 @@ public class GridSystem <TGridObject>
     private Vector3 origin;
     public bool showDebug;
 
+    private const float HEX_VERT_OFFSET = 0.75f;
+    
     public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
     public class OnGridValueChangedEventArgs: EventArgs
     {
@@ -37,29 +39,33 @@ public class GridSystem <TGridObject>
                 gridArray[x, y] = createGridObject(this, x,y);
             }
 
-       // if (showDebug)
-        {
-            for (int x = 0; x < gridArray.GetLength(0); x++)
-                for (int y = 0; y < gridArray.GetLength(1); y++)
-                {
-                    debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
-                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
-                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
-                }
+       //// if (showDebug)
+       // {
+       //     for (int x = 0; x < gridArray.GetLength(0); x++)
+       //         for (int y = 0; y < gridArray.GetLength(1); y++)
+       //         {
+       //             debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
+       //             Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
+       //             Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
+       //         }
 
-            OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) =>
-            {
-                debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
-            };
-        }
+            //OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) =>
+            //{
+            //    debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
+            //};
+       // }
     }
 
-    Vector3 GetWorldPosition(int x, int y)
+    public Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * cellSize + origin;
+        return 
+            new Vector3(x, 0) * cellSize +
+            new Vector3(0,y) * cellSize * HEX_VERT_OFFSET +
+           ( (y%2)==1 ? new Vector3(1,0,0) * cellSize *0.5f: Vector3.zero)
+            + origin;
     }
 
-     private void GetXY(Vector3 worldPosition, out int x, out int y)
+     public void GetXY(Vector3 worldPosition, out int x, out int y)
     {
         Vector3 temp = worldPosition - origin;
         x = Mathf.FloorToInt(temp.x / cellSize);
@@ -93,7 +99,7 @@ public class GridSystem <TGridObject>
         {
             return gridArray[x, y];
         }
-        return default(TGridObject);
+        return default;
     }
 
     public TGridObject GetGridObject(Vector3 worldPosition)
