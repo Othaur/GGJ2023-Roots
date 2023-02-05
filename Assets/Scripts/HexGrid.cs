@@ -52,20 +52,20 @@ public class HexGrid : MonoBehaviour
                 {
                     case GroundState.Wall:
                         {
-                            GameObject tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j)+ new Vector3(0,0,-2), Quaternion.identity);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;                            
                             break;
                         }
                     case GroundState.Start:
                         {
-                            GameObject tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j) + new Vector3(0, 0, 20), Quaternion.identity);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             ShowTile(tempTransform.gameObject);
                             break;
                         }
                     case GroundState.Empty:
                         {
-                            GameObject tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j) + new Vector3(0, 0, 10), Quaternion.identity);
                             grid.GetGridObject(i, j).SetTransform( tempTransform);
                             break;
                         }
