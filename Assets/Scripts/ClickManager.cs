@@ -12,12 +12,15 @@ public class ClickManager : MonoBehaviour
     
 
     public HexGrid hexGrid;
+    public AudioClip rootGrowth;
+    AudioSource audio;
 
     
     void Awake()
     {
         cam = Camera.main;
         hexGrid = FindObjectOfType<HexGrid>();
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -29,13 +32,29 @@ public class ClickManager : MonoBehaviour
             Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
             if (hexGrid != null)
             {
-                gridCenter = hexGrid.GetCellCenter(mousePosition);
-                OnMouseClick?.Invoke(gridCenter);
+                gridCenter = hexGrid.GetCellCenter(mousePosition);  
+
+                if (hexGrid.CanGrow(mousePosition))
+                {
+                    PlayRootSound();           
+                    OnMouseClick?.Invoke(gridCenter);
+                }
             }
             else
             {
+                PlayRootSound();
                 OnMouseClick?.Invoke(mousePosition);
             }
         }
     }
+
+    void PlayRootSound()
+    {
+        if (audio != null && rootGrowth != null)
+        {
+            audio.clip = rootGrowth;
+            audio.Play();
+        }
+    }
+
 }
