@@ -20,6 +20,9 @@ EditorUserSettings:
     RecentlyUsedSceneGuid-4:
       value: 0200015250000b0a54570e7741215e4442154028282a71322b7a4567b7e26c6b
       flags: 0
+    vcSharedLogLevel:
+      value: 0d5e400f0650
+      flags: 0
   m_VCAutomaticAdd: 1
   m_VCDebugCom: 0
   m_VCDebugCmd: 0
