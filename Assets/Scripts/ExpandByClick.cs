@@ -11,6 +11,11 @@ public class ExpandByClick : MonoBehaviour
 
     List<Vector3> targets;
 
+    List<Vector3> updatedVertices;
+    List<Vector2> updatedUVs;
+    List<int> updatedTriangles;
+
+
     Camera cam;
 
     [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
@@ -26,6 +31,10 @@ public class ExpandByClick : MonoBehaviour
         mesh = GetComponent<MeshFilter>().mesh;
 
         targets = new List<Vector3>();
+
+    updatedVertices = new List<Vector3>();
+    updatedUVs = new List<Vector2>();
+    updatedTriangles = new List<int>();
     }
     
     void InitializeMesh()
@@ -44,9 +53,9 @@ public class ExpandByClick : MonoBehaviour
         triangles = mesh.triangles;
     
 
-        List<Vector3> updatedVertices = new List<Vector3>();
-        List<Vector2> updatedUVs = new List<Vector2>();
-        List<int> updatedTriangles = new List<int>();
+        updatedVertices.Clear();
+        updatedUVs.Clear();
+        updatedTriangles.Clear();
 
 
         int c = 0;
@@ -110,34 +119,69 @@ public class ExpandByClick : MonoBehaviour
 
         Vector3 mid = MidpointBetween(transform.TransformPoint(updatedVertices[t0]), transform.TransformPoint(updatedVertices[t1]));
         Vector3 dir = DirectionBetween(mid, target);
+        float distance = Vector3.Distance(mid, target);
+
+
+        Vector3 tempStartTarget;
+        Vector3 tempEndTarget;
+        Vector3 t2Vtemp;
+        Vector3 t3Vtemp;
+        float tempDist = distance;
+        int t0temp = t0;
+        int t1temp = t1;
+        tempStartTarget = mid;
+        while (tempDist > Increment)
+        {   
+            tempEndTarget = tempStartTarget + dir * Increment;
+
+            t2Vtemp = tempEndTarget + GetPerpendicularVector(tempStartTarget - tempEndTarget) * -Width/2f;
+            t3Vtemp = tempEndTarget + GetPerpendicularVector(tempStartTarget - tempEndTarget) * Width/2f;
+
+            Debug.DrawLine(tempEndTarget, t2Vtemp, Color.cyan, 10f);
+            Debug.DrawLine(tempEndTarget, t3Vtemp, Color.cyan, 10f); 
+
+            t2Vtemp = transform.InverseTransformPoint(t2Vtemp);
+            t3Vtemp = transform.InverseTransformPoint(t3Vtemp);
+
+            UpdateMeshData(t0temp, t1temp, t2Vtemp, t2Vtemp);
+
+            t0temp = updatedVertices.IndexOf(t2Vtemp);
+            t1temp = updatedVertices.IndexOf(t3Vtemp);
+
+            t0 = updatedVertices.IndexOf(t3Vtemp);
+            t1 = updatedVertices.IndexOf(t2Vtemp);
+
+            tempStartTarget = tempEndTarget;
+            tempDist = tempDist - Increment;
+        }
+
+        
+
         Vector3 t2V = target + GetPerpendicularVector(mid - target) * -Width/2f;
         Vector3 t3V = target + GetPerpendicularVector(mid - target) * Width/2f;
 
         Debug.DrawLine(target, mid, Color.yellow, 10f);
         Debug.DrawLine(target, t2V, Color.green, 10f);
-        Debug.DrawLine(target, t3V, Color.red, 10f);
-
-        if (updatedVertices.Contains(t2V)) return;
-        //mid = transform.InverseTransformPoint(mid);
+        Debug.DrawLine(target, t3V, Color.red, 10f);        
+       
         t2V = transform.InverseTransformPoint(t2V);
-        t3V = transform.InverseTransformPoint(t3V);
-        //target = transform.InverseTransformPoint(target);
-
-        if (updatedVertices.Contains(t3V)) return;
+        t3V = transform.InverseTransformPoint(t3V);        
                 
-        updatedVertices.Add(t2V);
-        updatedVertices.Add(t3V);
+        UpdateMeshData(t0, t1, t2V, t3V);
 
-        updatedUVs.Add(new Vector2(t2V.x, t2V.y));
-        updatedUVs.Add(new Vector2(t3V.x, t3V.y));
+        // updatedVertices.Add(t2V);
+        // updatedVertices.Add(t3V);
 
-        updatedTriangles.Add(t0);
-        updatedTriangles.Add(t1);
-        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
+        // updatedUVs.Add(new Vector2(t2V.x, t2V.y));
+        // updatedUVs.Add(new Vector2(t3V.x, t3V.y));
 
-        updatedTriangles.Add(t1);
-        updatedTriangles.Add(updatedVertices.IndexOf(t2V));
-        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
+        // updatedTriangles.Add(t0);
+        // updatedTriangles.Add(t1);
+        // updatedTriangles.Add(updatedVertices.IndexOf(t3V));
+
+        // updatedTriangles.Add(t1);
+        // updatedTriangles.Add(updatedVertices.IndexOf(t2V));
+        // updatedTriangles.Add(updatedVertices.IndexOf(t3V));
 
         mesh.Clear();
 
@@ -147,6 +191,23 @@ public class ExpandByClick : MonoBehaviour
 
 
         mesh.RecalculateBounds();
+    }
+
+    void UpdateMeshData(int _t0, int _t1, Vector3 _t2V, Vector3 _t3V)
+    {
+        updatedVertices.Add(_t2V);
+        updatedVertices.Add(_t3V);
+
+        updatedUVs.Add(new Vector2(_t2V.x, _t2V.y));
+        updatedUVs.Add(new Vector2(_t3V.x, _t3V.y));
+
+        updatedTriangles.Add(_t0);
+        updatedTriangles.Add(_t1);
+        updatedTriangles.Add(updatedVertices.IndexOf(_t3V));
+
+        updatedTriangles.Add(_t1);
+        updatedTriangles.Add(updatedVertices.IndexOf(_t2V));
+        updatedTriangles.Add(updatedVertices.IndexOf(_t3V));
     }
 
     Vector3 MidpointBetween(Vector3 a, Vector3 b)
