@@ -57,19 +57,7 @@ public class GridSystem <TGridObject>
 
         Vector3Int roughXY = new Vector3Int(roughX, roughY);
 
-        bool oddRow = roughY % 2 == 1;
-
-        List<Vector3Int> neighbourList = new List<Vector3Int>
-        {
-            roughXY + new Vector3Int(-1,0),
-        roughXY + new Vector3Int(1, 0),
-
-        roughXY + new Vector3Int(oddRow? -1: 1, 1),
-        roughXY + new Vector3Int(0, 1),
-
-        roughXY + new Vector3Int(oddRow? -1:1, -1),
-        roughXY + new Vector3Int(0, -1),
-        };
+        List<Vector3Int> neighbourList =  GetNeighbours(roughX, roughY);
 
         Vector3Int closestXY = roughXY;
 
@@ -84,6 +72,41 @@ public class GridSystem <TGridObject>
         Debug.DrawLine(GetWorldPosition(closestXY.x, closestXY.y), UtilsClass.GetMouseWorldPosition());
         x = closestXY.x;
         y = closestXY.y;
+    }
+
+    public List<Vector3Int> GetNeighbours(int x, int y )
+    {        
+        Vector3Int roughXY = new Vector3Int(x, y);
+
+        bool oddRow = y % 2 == 1;
+
+        List<Vector3Int> neighbourList = new List<Vector3Int>
+        {
+            roughXY + new Vector3Int(-1,0),
+            roughXY + new Vector3Int(1, 0),
+
+            roughXY + new Vector3Int(oddRow? -1: 1, 1),
+            roughXY + new Vector3Int(0, 1),
+
+            roughXY + new Vector3Int(oddRow? -1:1, -1),
+            roughXY + new Vector3Int(0, -1),
+        };
+
+        List<Vector3Int> tempList = new List<Vector3Int>();
+        foreach(var n in neighbourList)
+        {
+            if (n.x < 0 || n.x >= width)
+            {
+                continue;
+            }
+            if (n.y < 0 || n.y >= height)
+            {
+                continue;
+            }
+            tempList.Add(n);
+        }
+
+        return tempList;
     }
 
     public void SetGridObject(int x, int y, TGridObject value)
