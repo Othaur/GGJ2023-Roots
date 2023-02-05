@@ -262,10 +262,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f95367ca8118f488ab76b06fb1ee10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testTransform: {fileID: 5982496515800965436, guid: 6f3987829bf3922459913d461fcc0881, type: 3}
-  wallTransform: {fileID: 0}
-  emptyTransform: {fileID: 0}
-  startTransform: {fileID: 0}
+  testTransform: {fileID: 5982496515800965442, guid: 6f3987829bf3922459913d461fcc0881, type: 3}
+  wallTransform: {fileID: 2528550757876182896, guid: f8093fec39fbd5d4fb5b5ccb8130f4bd, type: 3}
+  emptyTransform: {fileID: 2528550757876182896, guid: cdecca131f340434d80b87486202caa1, type: 3}
+  startTransform: {fileID: 2528550757876182896, guid: 3a116731f485da642ab2280f0fb14ec0, type: 3}
   currentTile: {x: 0, y: 0}
 --- !u!1001 &6225110126516316183
 PrefabInstance:
