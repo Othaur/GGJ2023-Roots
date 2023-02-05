@@ -138,15 +138,15 @@ public class ExpandByClick : MonoBehaviour
             t3Vtemp = tempEndTarget + GetPerpendicularVector(tempStartTarget - tempEndTarget) * Width/2f;
 
             Debug.DrawLine(tempEndTarget, t2Vtemp, Color.cyan, 10f);
-            Debug.DrawLine(tempEndTarget, t3Vtemp, Color.cyan, 10f); 
+            Debug.DrawLine(tempEndTarget, t3Vtemp, Color.magenta, 10f); 
 
             t2Vtemp = transform.InverseTransformPoint(t2Vtemp);
             t3Vtemp = transform.InverseTransformPoint(t3Vtemp);
 
-            UpdateMeshData(t0temp, t1temp, t2Vtemp, t2Vtemp);
+            UpdateMeshData(t0temp, t1temp, t2Vtemp, t3Vtemp);
 
-            t0temp = updatedVertices.IndexOf(t2Vtemp);
-            t1temp = updatedVertices.IndexOf(t3Vtemp);
+            t0temp = updatedVertices.IndexOf(t3Vtemp);
+            t1temp = updatedVertices.IndexOf(t2Vtemp);
 
             t0 = updatedVertices.IndexOf(t3Vtemp);
             t1 = updatedVertices.IndexOf(t2Vtemp);
