@@ -26,9 +26,15 @@ public class ClickManager : MonoBehaviour
         {
             Vector3 gridCenter;
             Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
-            gridCenter = hexGrid.GetCellCenter(mousePosition);
-
-            OnMouseClick?.Invoke(gridCenter);
+            if (hexGrid != null)
+            {
+                gridCenter = hexGrid.GetCellCenter(mousePosition);
+                OnMouseClick?.Invoke(gridCenter);
+            }
+            else
+            {
+                OnMouseClick?.Invoke(mousePosition);
+            }
         }
     }
 }

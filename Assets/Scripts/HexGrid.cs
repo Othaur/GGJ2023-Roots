@@ -90,8 +90,9 @@ public class HexGrid : MonoBehaviour
 
     public Vector3 GetCellCenter(Vector3 position)
     {
-        return position;
-
+        int x, y;
+        grid.GetXY(position, out x, out y);
+        return grid.GetWorldPosition(x, y);
     }
 
 }
