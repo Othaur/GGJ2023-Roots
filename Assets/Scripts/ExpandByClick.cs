@@ -21,6 +21,7 @@ public class ExpandByClick : MonoBehaviour
     [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
     [field: SerializeField, Range(0, 10f)]public float Width {get; private set;} = 1f;
     [field: SerializeField, Range(1f, 100f)]public float Buffer {get; private set;} = 10f;
+     
 
     // public Transform Target;
 
