@@ -17,6 +17,7 @@ public class ClickManager : MonoBehaviour
     void Awake()
     {
         cam = Camera.main;
+        hexGrid = FindObjectOfType<HexGrid>();
     }
 
     // Update is called once per frame

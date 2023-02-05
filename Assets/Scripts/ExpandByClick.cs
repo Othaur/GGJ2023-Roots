@@ -9,9 +9,11 @@ public class ExpandByClick : MonoBehaviour
     Vector2[] uvs;
     int[] triangles;
 
+    List<Vector3> targets;
+
     Camera cam;
 
-    //[field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
+    [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
     [field: SerializeField, Range(0, 10f)]public float Width {get; private set;} = 1f;
     [field: SerializeField, Range(1f, 100f)]public float Buffer {get; private set;} = 10f;
 
@@ -23,7 +25,7 @@ public class ExpandByClick : MonoBehaviour
         cam = Camera.main;
         mesh = GetComponent<MeshFilter>().mesh;
 
-        //ExtendMesh(Target.position);
+        targets = new List<Vector3>();
     }
     
     void InitializeMesh()
@@ -31,6 +33,8 @@ public class ExpandByClick : MonoBehaviour
 
 
     }
+
+
 
 
     public void ExtendMesh(Vector3 target)
@@ -47,40 +51,37 @@ public class ExpandByClick : MonoBehaviour
 
         int c = 0;
         int c2 = 0;
-        //float dis = Vector2.Distance(target, vertices[0]);
+        
         float dis = Buffer +1;
         for (int v = 0; v < vertices.Length; v++)
         {
-            updatedVertices.Add(vertices[v]);
-            //Check distance to target
-            //dis = Vector2.Distance(target, vertices[v]);
-            if (Vector3.Distance(target, vertices[v]) < dis)
+            updatedVertices.Add(vertices[v]);            
+            if (Vector3.Distance(target, transform.TransformPoint(updatedVertices[v])) < dis)
             {
                 c = v;
-                dis = Vector3.Distance(target, vertices[c]);
+                dis = Vector3.Distance(target, transform.TransformPoint(updatedVertices[c]));
             }            
         }
 
-        if (dis > Buffer) return;
+        if (dis > Buffer) {return;}
+        if (targets.Contains(target)) {return;}
+        
+        targets.Add(target);
+
         float dis2 = Buffer + 1;
         for (int v=0; v < vertices.Length; v++)
         {
-            if (Vector3.Distance(target, vertices[v]) < dis2)
+            if (Vector3.Distance(target, transform.TransformPoint(updatedVertices[v])) < dis2)
             {
                 if (v != c)
                 {
                     c2 = v;
-                    dis2 = Vector3.Distance(target, vertices[c2]);
+                    dis2 = Vector3.Distance(target, transform.TransformPoint(updatedVertices[c2]));
                 }
             }
         }
 
-        Debug.Log("Target Position" + target);
-        // Debug.Log("Closest position: " + vertices[c]);
-        // Debug.Log("Closest index: " + c);
-        // Debug.Log("2nd Closest position: " + vertices[c2]);
-        // Debug.Log("2nd Closest index: " + c2);
-        // Debug.Log("Vertex 0: " + vertices[0]);
+        Debug.Log("Target Position" + target);        
 
         for (int u = 0; u < uvs.Length; u++)
         {
@@ -90,15 +91,13 @@ public class ExpandByClick : MonoBehaviour
         for (int t = 0; t < triangles.Length; t++)
         {
             updatedTriangles.Add(triangles[t]);
-        }
-
-        
+        }       
 
         int t0 = c2;
         int t1 = c;        
         
         Vector3 s1 = updatedVertices[c] - updatedVertices[c2];
-        Vector3 s2 = target - updatedVertices[c2];
+        Vector3 s2 = transform.InverseTransformPoint(target) - updatedVertices[c2];
         Vector3 crossProduct = Vector3.Cross(s1, s2).normalized;
 
         if (crossProduct.z > 0f)
@@ -107,16 +106,24 @@ public class ExpandByClick : MonoBehaviour
             t1 = c2;
         }
 
-        //Debug.Log("Cross Product: " + crossProduct);
+        
 
-        Vector3 mid = MidpointBetween(updatedVertices[t0], updatedVertices[t1]);
+        Vector3 mid = MidpointBetween(transform.TransformPoint(updatedVertices[t0]), transform.TransformPoint(updatedVertices[t1]));
         Vector3 dir = DirectionBetween(mid, target);
         Vector3 t2V = target + GetPerpendicularVector(mid - target) * -Width/2f;
         Vector3 t3V = target + GetPerpendicularVector(mid - target) * Width/2f;
 
-        Debug.DrawLine(target, mid, Color.yellow, 5f);
-        Debug.DrawLine(target, t2V, Color.green, 5f);
-        Debug.DrawLine(target, t3V, Color.red, 5f);
+        Debug.DrawLine(target, mid, Color.yellow, 10f);
+        Debug.DrawLine(target, t2V, Color.green, 10f);
+        Debug.DrawLine(target, t3V, Color.red, 10f);
+
+        if (updatedVertices.Contains(t2V)) return;
+        //mid = transform.InverseTransformPoint(mid);
+        t2V = transform.InverseTransformPoint(t2V);
+        t3V = transform.InverseTransformPoint(t3V);
+        //target = transform.InverseTransformPoint(target);
+
+        if (updatedVertices.Contains(t3V)) return;
                 
         updatedVertices.Add(t2V);
         updatedVertices.Add(t3V);
