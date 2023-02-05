@@ -47,18 +47,20 @@ public class GenHexMaze
         List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
         foreach (var neighbour in neighbours)
         {
-            int index = neighbour.x + (neighbour.y * height);
+            int index = neighbour.x + (neighbour.y * width);
+            Debug.Log("Index: " + index + " from " + neighbour.x + "," + neighbour.y);
             if (nodes[index].State == GroundState.Wall)
             {
                 Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
+                //nodes[index].State = GroundState.Wall;
                 wallList.Add(nodes[index]);
             }
         }
 
         while(wallList.Count > 0)
         {
-            Debug.Log("path: " + pathList.Count + " wall: " + wallList.Count);
             MazeNode current = wallList[0];
+            DisplayList(wallList);
             wallList.RemoveAt(0);
             current.State = GroundState.Empty;
 
@@ -70,6 +72,15 @@ public class GenHexMaze
         }
 
         return nodes;
+    }
+
+
+    void DisplayList(List<MazeNode> list)
+    {
+        foreach(var i in list)
+        {
+            Debug.Log("node: " + i.X + "," + i.Y);
+        }
     }
 }
 

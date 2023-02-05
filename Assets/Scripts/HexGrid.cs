@@ -28,7 +28,7 @@ public class HexGrid : MonoBehaviour
     {
         GenHexMaze maze = new GenHexMaze();
 
-        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13,17));
+        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13,13));
 
         int index = 0;
         for (int j = 0; j < Height; j++)

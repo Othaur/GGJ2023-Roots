@@ -85,10 +85,10 @@ public class GridSystem <TGridObject>
             roughXY + new Vector3Int(-1,0),
             roughXY + new Vector3Int(1, 0),
 
-            roughXY + new Vector3Int(oddRow? -1: 1, 1),
+            roughXY + new Vector3Int(oddRow? 1: -1, 1),
             roughXY + new Vector3Int(0, 1),
 
-            roughXY + new Vector3Int(oddRow? -1:1, -1),
+            roughXY + new Vector3Int(oddRow? 1:-1, -1),
             roughXY + new Vector3Int(0, -1),
         };
 
