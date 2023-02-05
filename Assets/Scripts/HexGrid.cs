@@ -52,20 +52,20 @@ public class HexGrid : MonoBehaviour
                 {
                     case GroundState.Wall:
                         {
-                            GameObject tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j)+ new Vector3(0,0,-2), Quaternion.identity);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;                            
                             break;
                         }
                     case GroundState.Start:
                         {
-                            GameObject tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j) + new Vector3(0, 0, 20), Quaternion.identity);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             ShowTile(tempTransform.gameObject);
                             break;
                         }
                     case GroundState.Empty:
                         {
-                            GameObject tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            GameObject tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j) + new Vector3(0, 0, 10), Quaternion.identity);
                             grid.GetGridObject(i, j).SetTransform( tempTransform);
                             break;
                         }
@@ -88,14 +88,11 @@ public class HexGrid : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            int i, j;
-            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
-            MapGridObject currentTile = grid.GetGridObject(i, j);
-            
-            // Is the tile visible
-            if (IsTileVisible(currentTile.visualTransform.gameObject))
+            if (CanGrow(worldPos))
             {
-                // Is the tile empty
+                int i, j;
+                grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
+
                 int index = i + (j * Width);
                 if (nodes[index].State == GroundState.Empty)
                 {
@@ -133,6 +130,21 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    public bool CanGrow(Vector3 mousePosition)
+    {
+        int i, j;
+        grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
+        MapGridObject currentTile = grid.GetGridObject(i, j);
+
+        // Is the tile visible
+        if (IsTileVisible(currentTile.visualTransform.gameObject))
+        {
+            // Is the tile empty
+            return true;
+        }
+
+        return false;
+    }
     public List<Vector3Int> GetCellNeighbours(int x, int y)
     {
         return grid.GetNeighbours(x, y);
