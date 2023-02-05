@@ -155,7 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testTransform: {fileID: 5982496515800965436, guid: 6f3987829bf3922459913d461fcc0881, type: 3}
   wallTransform: {fileID: 8222844356461674413, guid: f8093fec39fbd5d4fb5b5ccb8130f4bd, type: 3}
-  empytyTransform: {fileID: 8222844356461674413, guid: cdecca131f340434d80b87486202caa1, type: 3}
+  emptyTransform: {fileID: 8222844356461674413, guid: cdecca131f340434d80b87486202caa1, type: 3}
+  startTransform: {fileID: 8222844356461674413, guid: 3a116731f485da642ab2280f0fb14ec0, type: 3}
 --- !u!212 &225345260
 SpriteRenderer:
   m_ObjectHideFlags: 0

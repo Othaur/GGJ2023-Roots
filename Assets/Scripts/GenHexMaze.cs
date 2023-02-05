@@ -37,12 +37,13 @@ public class GenHexMaze
                     temp.State = GroundState.Start;
                     Debug.Log("Start:" + i + "," + j);
                     startNode = temp;
+                    pathList.Add(startNode);
                 }
                 nodes.Add(temp);
             }
         }
 
-        // Add start node to path list and neighbours to wall list
+        // Add start node to path list and neighbours to wall list                
         List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
         foreach (var neighbour in neighbours)
         {
@@ -54,7 +55,19 @@ public class GenHexMaze
             }
         }
 
-        //while(true)
+        while(wallList.Count > 0)
+        {
+            Debug.Log("path: " + pathList.Count + " wall: " + wallList.Count);
+            MazeNode current = wallList[0];
+            wallList.RemoveAt(0);
+            current.State = GroundState.Empty;
+
+            int index = current.X + (current.Y * height);
+
+            nodes[index] = current;
+            pathList.Add(current);
+
+        }
 
         return nodes;
     }

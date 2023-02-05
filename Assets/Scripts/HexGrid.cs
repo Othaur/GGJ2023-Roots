@@ -9,7 +9,9 @@ public class HexGrid : MonoBehaviour
     private MapGridObject lastGridObject; 
     [SerializeField] Transform testTransform;
     [SerializeField] Transform wallTransform;
-    [SerializeField] Transform empytyTransform;
+    [SerializeField] Transform emptyTransform;
+    [SerializeField] Transform startTransform;
+
 
     public int Width { get; set; }
     public int Height { get; set; }
@@ -29,24 +31,36 @@ public class HexGrid : MonoBehaviour
         List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13,17));
 
         int index = 0;
-        for(int j =0;j<Height; j++)
-            for(int i = 0; i<Width; i++)
+        for (int j = 0; j < Height; j++)
+            for (int i = 0; i < Width; i++)
             {
                 index = i + (j * Width);
                 MapGridObject tempObject = grid.GetGridObject(i, j);
                 MazeNode tempNode = nodes[index];
-                if (tempNode.State == GroundState.Wall)
-                {
-                    Transform tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                 //   tempObject.SetTransform(tempTransform);
-                    grid.GetGridObject(i, j).visualTransform = tempTransform;
-                }
 
-                if (tempNode.State == GroundState.Start)
+                switch (tempNode.State)
                 {
-                    Transform tempTransform = Instantiate(testTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                    //   tempObject.SetTransform(tempTransform);
-                    grid.GetGridObject(i, j).visualTransform = tempTransform;
+                    case GroundState.Wall:
+                        {
+                            Transform tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            //   tempObject.SetTransform(tempTransform);
+                            grid.GetGridObject(i, j).visualTransform = tempTransform;
+                            break;
+                        }
+                    case GroundState.Start:
+                        {
+                            Transform tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            //   tempObject.SetTransform(tempTransform);
+                            grid.GetGridObject(i, j).visualTransform = tempTransform;
+                            break;
+                        }
+                    case GroundState.Empty:
+                        {
+                            Transform tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            //   tempObject.SetTransform(tempTransform);
+                            grid.GetGridObject(i, j).visualTransform = tempTransform;
+                            break;
+                        }
                 }
             }
     }
