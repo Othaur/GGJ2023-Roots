@@ -88,12 +88,13 @@ public class HexGrid : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (CanGrow(worldPos))
-            {
+            
                 int i, j;
                 grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
 
                 int index = i + (j * Width);
+            if (CanGrow(worldPos))
+            {
                 if (nodes[index].State == GroundState.Empty)
                 {
                     List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
