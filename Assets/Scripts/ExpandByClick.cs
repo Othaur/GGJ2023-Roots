@@ -198,8 +198,10 @@ public class ExpandByClick : MonoBehaviour
         updatedVertices.Add(_t2V);
         updatedVertices.Add(_t3V);
 
-        updatedUVs.Add(new Vector2(_t2V.x, _t2V.y));
-        updatedUVs.Add(new Vector2(_t3V.x, _t3V.y));
+        // updatedUVs.Add(new Vector2(_t2V.x, _t2V.y));
+        // updatedUVs.Add(new Vector2(_t3V.x, _t3V.y));
+        updatedUVs.Add(new Vector2(0, 0));
+        updatedUVs.Add(new Vector2(0, 1));
 
         updatedTriangles.Add(_t0);
         updatedTriangles.Add(_t1);
