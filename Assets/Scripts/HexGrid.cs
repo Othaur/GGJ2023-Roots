@@ -17,18 +17,23 @@ public class HexGrid : MonoBehaviour
     public int Height { get; set; }
     private void Awake()
     {
-        Width = 26;
-        Height = 18;
-        float cellSize = 5f;
+        Width = 30; //26
+        Height = 18; //18
+        float cellSize = 5f; //5
 
         grid = new GridSystem<MapGridObject>(Width, Height, cellSize, new Vector3((Width * cellSize)/-2f, ((Height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
     }
     private void Start()
     {
+        GenerateMaze();
+    }
+
+    void GenerateMaze()
+    {
         GenHexMaze maze = new GenHexMaze();
 
-        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13,17));
+        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13, 17));
 
         int index = 0;
         for (int j = 0; j < Height; j++)
@@ -43,6 +48,7 @@ public class HexGrid : MonoBehaviour
                     case GroundState.Wall:
                         {
                             Transform tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            // Debug.Log("Bulding a wall: " + i + "," + j);
                             //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             break;
@@ -50,6 +56,7 @@ public class HexGrid : MonoBehaviour
                     case GroundState.Start:
                         {
                             Transform tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            // Debug.Log("Bulding a Start: " + i + "," + j);
                             //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             break;
@@ -57,6 +64,7 @@ public class HexGrid : MonoBehaviour
                     case GroundState.Empty:
                         {
                             Transform tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                            //  Debug.Log("Bulding an Empty: " + i + "," + j);
                             //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             break;
@@ -69,6 +77,19 @@ public class HexGrid : MonoBehaviour
     {
         Vector3 worldPos = UtilsClass.GetMouseWorldPosition();
         Debug.DrawLine(Vector3.zero, worldPos);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                {
+                    var temp = grid.GetGridObject(i, j);
+                    Destroy(temp.visualTransform.gameObject);
+                    temp.ClearTransform();
+                }
+
+            GenerateMaze();
+        }
 
         if (lastGridObject != null)
         {
