@@ -88,14 +88,14 @@ public class HexGrid : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (CanGrow(worldPos))
-            {
+            
                 int i, j;
                 grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
 
                 int index = i + (j * Width);
-                if (nodes[index].State == GroundState.Empty)
-                {
+            if (CanGrow(worldPos))
+            {
+                
                     List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
 
                     foreach (var n in neighbours)
@@ -103,7 +103,7 @@ public class HexGrid : MonoBehaviour
                         MapGridObject temp = grid.GetGridObject(n.x, n.y);
                         ShowTile(temp.visualTransform.gameObject);
                     }
-                }
+                
             }
             //for (int i = 0; i < Width; i++)
             //    for (int j = 0; j < Height; j++)
@@ -139,8 +139,15 @@ public class HexGrid : MonoBehaviour
         // Is the tile visible
         if (IsTileVisible(currentTile.visualTransform.gameObject))
         {
+            
+            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
+
+            int index = i + (j * Width);
             // Is the tile empty
-            return true;
+            if (nodes[index].State == GroundState.Empty)
+            {
+                return true;
+            }
         }
 
         return false;
