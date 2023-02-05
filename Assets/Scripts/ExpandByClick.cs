@@ -126,7 +126,10 @@ public class ExpandByClick : MonoBehaviour
 
         updatedTriangles.Add(t0);
         updatedTriangles.Add(t1);
-        updatedTriangles.Add(updatedVertices.IndexOf(target));
+        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
+
+        updatedTriangles.Add(t1);
+        updatedTriangles.Add(updatedVertices.IndexOf(t2V));
         updatedTriangles.Add(updatedVertices.IndexOf(t3V));
 
         mesh.Clear();
