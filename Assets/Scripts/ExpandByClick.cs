@@ -11,11 +11,11 @@ public class ExpandByClick : MonoBehaviour
 
     Camera cam;
 
-    [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
+    //[field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
     [field: SerializeField, Range(0, 10f)]public float Width {get; private set;} = 1f;
     [field: SerializeField, Range(1f, 100f)]public float Buffer {get; private set;} = 10f;
 
-    public Transform Target;
+    // public Transform Target;
 
     // Start is called before the first frame update
     void Start()
@@ -25,17 +25,7 @@ public class ExpandByClick : MonoBehaviour
 
         //ExtendMesh(Target.position);
     }
-
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
-            Target.position = mousePosition;
-            ExtendMesh(Target.position);
-        }
-    }
-
+    
     void InitializeMesh()
     {
 
@@ -85,7 +75,7 @@ public class ExpandByClick : MonoBehaviour
             }
         }
 
-
+        Debug.Log("Target Position" + target);
         // Debug.Log("Closest position: " + vertices[c]);
         // Debug.Log("Closest index: " + c);
         // Debug.Log("2nd Closest position: " + vertices[c2]);
@@ -102,8 +92,7 @@ public class ExpandByClick : MonoBehaviour
             updatedTriangles.Add(triangles[t]);
         }
 
-        updatedVertices.Add(target);
-        updatedUVs.Add(new Vector2(target.x , target.y));
+        
 
         int t0 = c2;
         int t1 = c;        
@@ -118,13 +107,30 @@ public class ExpandByClick : MonoBehaviour
             t1 = c2;
         }
 
-        Debug.Log("Cross Product: " + crossProduct);
+        //Debug.Log("Cross Product: " + crossProduct);
+
+        Vector3 mid = MidpointBetween(updatedVertices[t0], updatedVertices[t1]);
+        Vector3 dir = DirectionBetween(mid, target);
+        Vector3 t2V = target + GetPerpendicularVector(mid - target) * -Width/2f;
+        Vector3 t3V = target + GetPerpendicularVector(mid - target) * Width/2f;
+
+        Debug.DrawLine(target, mid, Color.yellow, 5f);
+        Debug.DrawLine(target, t2V, Color.green, 5f);
+        Debug.DrawLine(target, t3V, Color.red, 5f);
+                
+        updatedVertices.Add(t2V);
+        updatedVertices.Add(t3V);
+
+        updatedUVs.Add(new Vector2(t2V.x, t2V.y));
+        updatedUVs.Add(new Vector2(t3V.x, t3V.y));
 
         updatedTriangles.Add(t0);
         updatedTriangles.Add(t1);
-        updatedTriangles.Add(updatedVertices.IndexOf(target));
-        
+        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
 
+        updatedTriangles.Add(t1);
+        updatedTriangles.Add(updatedVertices.IndexOf(t2V));
+        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
 
         mesh.Clear();
 
@@ -136,8 +142,20 @@ public class ExpandByClick : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
-    // Vertor3 MidpointBetween(Vector3 a, Vector3 b)
-    // {
+    Vector3 MidpointBetween(Vector3 a, Vector3 b)
+    {
+        return new Vector3(a.x + (b.x - a.x)/2f, a.y + (b.y - a.y)/2f, 0);
+    }
 
-    // }
+    Vector3 DirectionBetween(Vector3 origin, Vector3 destination)
+    {
+        return (destination - origin).normalized;
+    }
+
+    Vector3 GetPerpendicularVector(Vector3 v)
+    {
+        //return CodeMonkey.Utils.UtilsClass.ApplyRotationToVector(v, -90f);
+        //return Vector2.Perpendicular(v);
+        return new Vector3(-v.y, v.x) / Mathf.Sqrt(Mathf.Pow(v.x, 2f) + Mathf.Pow(v.y, 2f));
+    }
 }
