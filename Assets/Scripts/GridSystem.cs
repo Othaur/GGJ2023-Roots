@@ -69,7 +69,7 @@ public class GridSystem <TGridObject>
                 closestXY = neighbour;
             }
         }
-        Debug.DrawLine(GetWorldPosition(closestXY.x, closestXY.y), UtilsClass.GetMouseWorldPosition());
+     //   Debug.DrawLine(GetWorldPosition(closestXY.x, closestXY.y), UtilsClass.GetMouseWorldPosition());
         x = closestXY.x;
         y = closestXY.y;
     }

@@ -13,6 +13,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField] GameObject startTransform;
 
     public Vector2Int currentTile;
+    List<MazeNode> nodes;
 
 
     public int Width { get; set; }
@@ -37,7 +38,7 @@ public class HexGrid : MonoBehaviour
         int startX = 13;
         int startY = 17;
 
-        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(startX, startY));
+        nodes = maze.GenerateMaze(this, new Vector2Int(startX, startY));
 
         int index = 0;
         for (int j = 0; j < Height; j++)
@@ -90,7 +91,7 @@ public class HexGrid : MonoBehaviour
     private void Update()
     {
         Vector3 worldPos = UtilsClass.GetMouseWorldPosition();
-        Debug.DrawLine(Vector3.zero, worldPos);
+      //  Debug.DrawLine(Vector3.zero, worldPos);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -99,14 +100,20 @@ public class HexGrid : MonoBehaviour
             MapGridObject currentTile = grid.GetGridObject(i, j);
             
             Debug.Log("Display: " + IsTileVisible(currentTile.visualTransform.gameObject));
+            // Is the tile visible
             if (IsTileVisible(currentTile.visualTransform.gameObject))
             {
-                List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
-
-                foreach (var n in neighbours)
+                // Is the tile empty
+                int index = i + (j * Width);
+                if (nodes[index].State == GroundState.Empty)
                 {
-                    MapGridObject temp = grid.GetGridObject(n.x, n.y);
-                    ShowTile(temp.visualTransform.gameObject);
+                    List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
+
+                    foreach (var n in neighbours)
+                    {
+                        MapGridObject temp = grid.GetGridObject(n.x, n.y);
+                        ShowTile(temp.visualTransform.gameObject);
+                    }
                 }
             }
             //for (int i = 0; i < Width; i++)
