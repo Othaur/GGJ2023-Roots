@@ -8,9 +8,7 @@ public class HexGrid : MonoBehaviour
     private GridSystem<MapGridObject> grid;
     private MapGridObject lastGridObject;
  // [SerializeField] Transform pfHex;
-    [SerializeField] Transform WallTransform;
-    [SerializeField] Transform EmnptyTransform;
-    [SerializeField] Transform StartTransform;
+    [SerializeField] Transform testTransform;
 
     public int Width { get; set; }
     public int Height { get; set; }
@@ -22,33 +20,22 @@ public class HexGrid : MonoBehaviour
 
         grid = new GridSystem<MapGridObject>(Width, Height, cellSize, new Vector3((Width * cellSize)/-2f, ((Height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
-        //for( int x=0; x<Width; x++)
-        //    for(int y =0; y<Height; y++)
-        //    {
-        //       Transform visualTransform =  Instantiate(WallTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
-        //        grid.GetGridObject(x, y).visualTransform = visualTransform;
-        //        grid.GetGridObject(x,y).Hide();
-        //    }
+        for( int x=0; x<Width; x++)
+            for(int y =0; y<Height; y++)
+            {
+               Transform visualTransform =  Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
+                grid.GetGridObject(x, y).visualTransform = visualTransform;
+                grid.GetGridObject(x,y).Hide();
+            }
     }
     private void Start()
     {
         GenHexMaze maze = new GenHexMaze();
 
-        List<MazeNode> nodes = maze.GenerateMaze(this);
+        maze.GenerateMaze(this);
 
-        int index=0; 
-        for(int i =0;i<Width; i++)
-            for(int j =0; j<Height; j++)
-            {
-                index = i + (j * Width);
-                if (nodes[index].State == GroundState.Wall)
-                {
-                    Transform tempTransform = Instantiate(WallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                    MapGridObject tempObject = grid.GetGridObject(i, j);
-                    tempObject.SetTransform(tempTransform);
-                    grid.SetGridObject(i, j, tempObject);
-                }
-            }
+        //for(int i =0;i<Width; i++)
+            
 
     }
 
