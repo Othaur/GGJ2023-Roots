@@ -34,7 +34,7 @@ public class ClickManager : MonoBehaviour
             {
                 gridCenter = hexGrid.GetCellCenter(mousePosition);  
 
-                if (true)
+                if (hexGrid.CanGrow(mousePosition))
                 {
                     PlayRootSound();           
                     OnMouseClick?.Invoke(gridCenter);
