@@ -6,8 +6,7 @@ using CodeMonkey.Utils;
 public class HexGrid : MonoBehaviour
 {
     private GridSystem<MapGridObject> grid;
-    private MapGridObject lastGridObject;
- // [SerializeField] Transform pfHex;
+    private MapGridObject lastGridObject; 
     [SerializeField] Transform testTransform;
     [SerializeField] Transform wallTransform;
     [SerializeField] Transform empytyTransform;
@@ -22,19 +21,12 @@ public class HexGrid : MonoBehaviour
 
         grid = new GridSystem<MapGridObject>(Width, Height, cellSize, new Vector3((Width * cellSize)/-2f, ((Height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
-        //for( int x=0; x<Width; x++)
-        //    for(int y =0; y<Height; y++)
-        //    {
-        //       Transform visualTransform =  Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
-        //        grid.GetGridObject(x, y).visualTransform = visualTransform;
-        //        grid.GetGridObject(x,y).Hide();
-        //    }
     }
     private void Start()
     {
         GenHexMaze maze = new GenHexMaze();
 
-        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2(6,8));
+        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(13,17));
 
         int index = 0;
         for(int j =0;j<Height; j++)
@@ -56,10 +48,7 @@ public class HexGrid : MonoBehaviour
                     //   tempObject.SetTransform(tempTransform);
                     grid.GetGridObject(i, j).visualTransform = tempTransform;
                 }
-
             }
-            
-
     }
 
     private void Update()
@@ -82,6 +71,11 @@ public class HexGrid : MonoBehaviour
             Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + x + "," + y);
            // lastGridObject.Show();
         }
+    }
+
+    public List<Vector3Int> GetCellNeighbours(int x, int y)
+    {
+        return grid.GetNeighbours(x, y);
     }
 
     public MapGridObject GetObject(int x, int y)

@@ -12,7 +12,7 @@ public enum GroundState
 public class GenHexMaze
 {
 
-    public List<MazeNode> GenerateMaze(HexGrid grid, Vector2 startPos)
+    public List<MazeNode> GenerateMaze(HexGrid grid, Vector2Int startPos)
     {
         int i, j;
 
@@ -43,8 +43,12 @@ public class GenHexMaze
         }
 
         // Add start node to path list and rest to wall list
-
-
+        //List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
+        //foreach(var neighbour in neighbours)
+        //{
+        //    int index = neighbour.x + (neighbour.y * height);
+        //    if (nodes[index] == null) ;
+        //}
 
 
         return nodes;
