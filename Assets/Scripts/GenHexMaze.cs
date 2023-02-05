@@ -9,10 +9,10 @@ public enum GroundState
     Start
 }
 
-public class GenHexMaze : MonoBehaviour
+public class GenHexMaze
 {
 
-    public List<MazeNode> GenerateMaze(HexGrid grid)
+    public List<MazeNode> GenerateMaze(HexGrid grid, Vector2Int startPos)
     {
         int i, j;
 
@@ -20,20 +20,54 @@ public class GenHexMaze : MonoBehaviour
         int height = grid.Height;
 
         List<MazeNode> nodes = new List<MazeNode>();
+        List<MazeNode> pathList = new List<MazeNode>();
+        List<MazeNode> wallList = new List<MazeNode>();
 
+        MazeNode startNode;
         // Make everything a wall
-        for (i=0; i<width; i++)
+        for (j=0; j<height; j++)
         {
-            for(j=0; j<height; j++)
+            for(i=0; i<width; i++)
             {
                 MazeNode temp = new MazeNode(i, j, grid.GetObject(i, j));
                 temp.State = GroundState.Wall;
 
+                if (i == startPos.x && j == startPos.y)
+                {
+                    temp.State = GroundState.Start;
+                    Debug.Log("Start:" + i + "," + j);
+                    startNode = temp;
+                    pathList.Add(startNode);
+                }
                 nodes.Add(temp);
             }
         }
 
+        // Add start node to path list and neighbours to wall list                
+        List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
+        foreach (var neighbour in neighbours)
+        {
+            int index = neighbour.x + (neighbour.y * height);
+            if (nodes[index].State == GroundState.Wall)
+            {
+                Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
+                wallList.Add(nodes[index]);
+            }
+        }
 
+        while(wallList.Count > 0)
+        {
+            Debug.Log("path: " + pathList.Count + " wall: " + wallList.Count);
+            MazeNode current = wallList[0];
+            wallList.RemoveAt(0);
+            current.State = GroundState.Empty;
+
+            int index = current.X + (current.Y * height);
+
+            nodes[index] = current;
+            pathList.Add(current);
+
+        }
 
         return nodes;
     }
