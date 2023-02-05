@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: f8cd08a0b15145e4e9ca9017eab5e576
+guid: 65e9915ae8586b440b8bca77a6ccd3d2
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rock_textured
+    second: {fileID: 2100000, guid: b77cecb8a6203e942aeddf3345403174, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -42,8 +47,8 @@ ModelImporter:
     sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
