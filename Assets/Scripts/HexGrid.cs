@@ -9,32 +9,55 @@ public class HexGrid : MonoBehaviour
     private MapGridObject lastGridObject;
  // [SerializeField] Transform pfHex;
     [SerializeField] Transform testTransform;
+    [SerializeField] Transform wallTransform;
+    [SerializeField] Transform empytyTransform;
 
     public int Width { get; set; }
     public int Height { get; set; }
     private void Awake()
     {
-        Width = 15;
+        Width = 13;
         Height = 9;
         float cellSize = 10f;
 
         grid = new GridSystem<MapGridObject>(Width, Height, cellSize, new Vector3((Width * cellSize)/-2f, ((Height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
-        for( int x=0; x<Width; x++)
-            for(int y =0; y<Height; y++)
-            {
-               Transform visualTransform =  Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
-                grid.GetGridObject(x, y).visualTransform = visualTransform;
-                grid.GetGridObject(x,y).Hide();
-            }
+        //for( int x=0; x<Width; x++)
+        //    for(int y =0; y<Height; y++)
+        //    {
+        //       Transform visualTransform =  Instantiate(testTransform, grid.GetWorldPosition(x, y), Quaternion.identity);
+        //        grid.GetGridObject(x, y).visualTransform = visualTransform;
+        //        grid.GetGridObject(x,y).Hide();
+        //    }
     }
     private void Start()
     {
         GenHexMaze maze = new GenHexMaze();
 
-        maze.GenerateMaze(this);
+        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2(6,8));
 
-        //for(int i =0;i<Width; i++)
+        int index = 0;
+        for(int j =0;j<Height; j++)
+            for(int i = 0; i<Width; i++)
+            {
+                index = i + (j * Width);
+                MapGridObject tempObject = grid.GetGridObject(i, j);
+                MazeNode tempNode = nodes[index];
+                if (tempNode.State == GroundState.Wall)
+                {
+                    Transform tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                 //   tempObject.SetTransform(tempTransform);
+                    grid.GetGridObject(i, j).visualTransform = tempTransform;
+                }
+
+                if (tempNode.State == GroundState.Start)
+                {
+                    Transform tempTransform = Instantiate(testTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
+                    //   tempObject.SetTransform(tempTransform);
+                    grid.GetGridObject(i, j).visualTransform = tempTransform;
+                }
+
+            }
             
 
     }
@@ -46,7 +69,7 @@ public class HexGrid : MonoBehaviour
 
         if (lastGridObject != null)
         {
-            lastGridObject.Hide();
+           // lastGridObject.Hide();
         }
         int x, y;
         Debug.Log("Object:" + grid.GetWorldPosition(Mathf.RoundToInt(worldPos.x),Mathf.RoundToInt( worldPos.y)).ToString());
@@ -55,8 +78,9 @@ public class HexGrid : MonoBehaviour
         
         if (lastGridObject != null)
         {
-            Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + lastGridObject.visualTransform.position);
-            lastGridObject.Show();
+            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out x, out y);
+            Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + x + "," + y);
+           // lastGridObject.Show();
         }
     }
 
@@ -80,18 +104,18 @@ public class MapGridObject
     int x, y;
     public Transform visualTransform;
     
-    public void Show()
-    {
-        visualTransform.Find("Selected").gameObject.SetActive(true);
-        visualTransform.Find("Hex").gameObject.SetActive(false);
-        //Debug.Log("Showing cell");
-    }
+    //public void Show()
+    //{
+    //    visualTransform.Find("Selected").gameObject.SetActive(true);
+    //    visualTransform.Find("Hex").gameObject.SetActive(false);
+    //    //Debug.Log("Showing cell");
+    //}
 
-    public void Hide()
-    {
-        visualTransform.Find("Selected").gameObject.SetActive(false);
-        visualTransform.Find("Hex").gameObject.SetActive(true);
-    }
+    //public void Hide()
+    //{
+    //    visualTransform.Find("Selected").gameObject.SetActive(false);
+    //    visualTransform.Find("Hex").gameObject.SetActive(true);
+    //}
 
     public MapGridObject(GridSystem<MapGridObject> grid, int x, int y)
     {

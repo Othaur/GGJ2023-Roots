@@ -9,10 +9,10 @@ public enum GroundState
     Start
 }
 
-public class GenHexMaze : MonoBehaviour
+public class GenHexMaze
 {
 
-    public List<MazeNode> GenerateMaze(HexGrid grid)
+    public List<MazeNode> GenerateMaze(HexGrid grid, Vector2 startPos)
     {
         int i, j;
 
@@ -20,18 +20,30 @@ public class GenHexMaze : MonoBehaviour
         int height = grid.Height;
 
         List<MazeNode> nodes = new List<MazeNode>();
+        List<MazeNode> pathList = new List<MazeNode>();
+        List<MazeNode> wallList = new List<MazeNode>();
 
+        MazeNode startNode;
         // Make everything a wall
-        for (i=0; i<width; i++)
+        for (j=0; j<height; j++)
         {
-            for(j=0; j<height; j++)
+            for(i=0; i<width; i++)
             {
                 MazeNode temp = new MazeNode(i, j, grid.GetObject(i, j));
                 temp.State = GroundState.Wall;
 
+                if (i == startPos.x && j == startPos.y)
+                {
+                    temp.State = GroundState.Start;
+                    Debug.Log("Start:" + i + "," + j);
+                    startNode = temp;
+                }
                 nodes.Add(temp);
             }
         }
+
+        // Add start node to path list and rest to wall list
+
 
 
 
