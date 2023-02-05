@@ -3,7 +3,42 @@ guid: 54c2203f7c7a6e74c9e42086f0dd05a8
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCube1Mat
+    second: {fileID: 2100000, guid: 9bfcf55395822cf4f8daa0340748969a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCube2Mat
+    second: {fileID: 2100000, guid: fa1d16fca9a9313409b0f0effd72e774, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCube3Mat
+    second: {fileID: 2100000, guid: b8963631ac7ca3947b4814ef6b67b20f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCylinder2Mat
+    second: {fileID: 2100000, guid: be11b82d9b424f54db489de3c8e54e4b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pPlatonic1Mat
+    second: {fileID: 2100000, guid: 7fd75933f71c72b4ab1b190b7cad5297, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pPlatonic3Mat
+    second: {fileID: 2100000, guid: 87acdb96b78c3ca4b955d3c6361d2459, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pPlatonic4Mat
+    second: {fileID: 2100000, guid: 116e16639f00c024db141867ebb01763, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
