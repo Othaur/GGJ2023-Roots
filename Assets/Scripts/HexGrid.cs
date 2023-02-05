@@ -86,6 +86,11 @@ public class HexGrid : MonoBehaviour
     {
         Vector3 worldPos = UtilsClass.GetMouseWorldPosition();
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             
