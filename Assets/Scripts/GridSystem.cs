@@ -92,7 +92,21 @@ public class GridSystem <TGridObject>
             roughXY + new Vector3Int(0, -1),
         };
 
-        return neighbourList;
+        List<Vector3Int> tempList = new List<Vector3Int>();
+        foreach(var n in neighbourList)
+        {
+            if (n.x < 0 || n.x >= width)
+            {
+                continue;
+            }
+            if (n.y < 0 || n.y >= height)
+            {
+                continue;
+            }
+            tempList.Add(n);
+        }
+
+        return tempList;
     }
 
     public void SetGridObject(int x, int y, TGridObject value)

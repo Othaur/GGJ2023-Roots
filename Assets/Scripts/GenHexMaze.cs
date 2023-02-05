@@ -49,7 +49,7 @@ public class GenHexMaze
             int index = neighbour.x + (neighbour.y * height);
             if (nodes[index].State == GroundState.Wall)
             {
-                Debug.Log("AAAAAAHAHHH");
+                Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
             }
         }
 
