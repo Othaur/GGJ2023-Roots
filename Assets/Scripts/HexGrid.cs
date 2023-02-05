@@ -70,6 +70,13 @@ public class HexGrid : MonoBehaviour
         grid.SetGridObject(x, y, item);
     }
 
+    public Vector3 GetCellCenter(Vector3 position)
+    {
+        int x, y;
+        grid.GetXY(position, out x, out y);
+        return grid.GetWorldPosition(x, y);
+    }
+
 }
 
 
