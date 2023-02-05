@@ -43,12 +43,15 @@ public class GenHexMaze
         }
 
         // Add start node to path list and rest to wall list
-        //List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
-        //foreach(var neighbour in neighbours)
-        //{
-        //    int index = neighbour.x + (neighbour.y * height);
-        //    if (nodes[index] == null) ;
-        //}
+        List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
+        foreach (var neighbour in neighbours)
+        {
+            int index = neighbour.x + (neighbour.y * height);
+            if (nodes[index].State == GroundState.Wall)
+            {
+                Debug.Log("AAAAAAHAHHH");
+            }
+        }
 
 
         return nodes;
