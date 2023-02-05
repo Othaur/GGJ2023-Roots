@@ -61,14 +61,14 @@ public class HexGrid : MonoBehaviour
            // lastGridObject.Hide();
         }
         int x, y;
-        Debug.Log("Object:" + grid.GetWorldPosition(Mathf.RoundToInt(worldPos.x),Mathf.RoundToInt( worldPos.y)).ToString());
+        // Debug.Log("Object:" + grid.GetWorldPosition(Mathf.RoundToInt(worldPos.x),Mathf.RoundToInt( worldPos.y)).ToString());
         lastGridObject = grid.GetGridObject(worldPos);
         
         
         if (lastGridObject != null)
         {
             grid.GetXY(UtilsClass.GetMouseWorldPosition(), out x, out y);
-            Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + x + "," + y);
+          //  Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + x + "," + y);
            // lastGridObject.Show();
         }
     }

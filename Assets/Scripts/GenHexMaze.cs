@@ -54,7 +54,7 @@ public class GenHexMaze
             }
         }
 
-        while()
+        //while(true)
 
         return nodes;
     }
