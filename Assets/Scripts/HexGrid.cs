@@ -17,9 +17,9 @@ public class HexGrid : MonoBehaviour
     public int Height { get; set; }
     private void Awake()
     {
-        Width = 26; //26
+        Width = 30; //26
         Height = 18; //18
-        float cellSize = 10f; //5
+        float cellSize = 5f; //5
 
         grid = new GridSystem<MapGridObject>(Width, Height, cellSize, new Vector3((Width * cellSize)/-2f, ((Height*cellSize)*.75f/-2f)+1 ), (GridSystem<MapGridObject> g, int x, int y) => new MapGridObject(g, x, y));
 
