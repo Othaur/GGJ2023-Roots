@@ -69,7 +69,6 @@ public class GridSystem <TGridObject>
                 closestXY = neighbour;
             }
         }
-        Debug.DrawLine(GetWorldPosition(closestXY.x, closestXY.y), UtilsClass.GetMouseWorldPosition());
         x = closestXY.x;
         y = closestXY.y;
     }
@@ -128,7 +127,6 @@ public class GridSystem <TGridObject>
 
         GetXY(worldPosition, out x, out y);
         SetGridObject(x, y, value);
-        Debug.Log("ITem added");
     }
 
     public TGridObject GetGridObject(int x, int y)

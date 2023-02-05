@@ -13,6 +13,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField] GameObject startTransform;
 
     public Vector2Int currentTile;
+    List<MazeNode> nodes;
 
 
     public int Width { get; set; }
@@ -37,7 +38,7 @@ public class HexGrid : MonoBehaviour
         int startX = 13;
         int startY = 17;
 
-        List<MazeNode> nodes = maze.GenerateMaze(this, new Vector2Int(startX, startY));
+        nodes = maze.GenerateMaze(this, new Vector2Int(startX, startY));
 
         int index = 0;
         for (int j = 0; j < Height; j++)
@@ -52,16 +53,12 @@ public class HexGrid : MonoBehaviour
                     case GroundState.Wall:
                         {
                             GameObject tempTransform = Instantiate(wallTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                            // Debug.Log("Bulding a wall: " + i + "," + j);
-                            //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;                            
                             break;
                         }
                     case GroundState.Start:
                         {
                             GameObject tempTransform = Instantiate(startTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                            // Debug.Log("Bulding a Start: " + i + "," + j);
-                            //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).visualTransform = tempTransform;
                             ShowTile(tempTransform.gameObject);
                             break;
@@ -69,8 +66,6 @@ public class HexGrid : MonoBehaviour
                     case GroundState.Empty:
                         {
                             GameObject tempTransform = Instantiate(emptyTransform, grid.GetWorldPosition(i, j), Quaternion.identity);
-                            //  Debug.Log("Bulding an Empty: " + i + "," + j);
-                            //   tempObject.SetTransform(tempTransform);
                             grid.GetGridObject(i, j).SetTransform( tempTransform);
                             break;
                         }
@@ -90,7 +85,6 @@ public class HexGrid : MonoBehaviour
     private void Update()
     {
         Vector3 worldPos = UtilsClass.GetMouseWorldPosition();
-        Debug.DrawLine(Vector3.zero, worldPos);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -98,15 +92,20 @@ public class HexGrid : MonoBehaviour
             grid.GetXY(UtilsClass.GetMouseWorldPosition(), out i, out j);
             MapGridObject currentTile = grid.GetGridObject(i, j);
             
-            Debug.Log("Display: " + IsTileVisible(currentTile.visualTransform.gameObject));
+            // Is the tile visible
             if (IsTileVisible(currentTile.visualTransform.gameObject))
             {
-                List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
-
-                foreach (var n in neighbours)
+                // Is the tile empty
+                int index = i + (j * Width);
+                if (nodes[index].State == GroundState.Empty)
                 {
-                    MapGridObject temp = grid.GetGridObject(n.x, n.y);
-                    ShowTile(temp.visualTransform.gameObject);
+                    List<Vector3Int> neighbours = grid.GetNeighbours(i, j);
+
+                    foreach (var n in neighbours)
+                    {
+                        MapGridObject temp = grid.GetGridObject(n.x, n.y);
+                        ShowTile(temp.visualTransform.gameObject);
+                    }
                 }
             }
             //for (int i = 0; i < Width; i++)
@@ -125,15 +124,12 @@ public class HexGrid : MonoBehaviour
            // lastGridObject.Hide();
         }
         int x, y;
-        // Debug.Log("Object:" + grid.GetWorldPosition(Mathf.RoundToInt(worldPos.x),Mathf.RoundToInt( worldPos.y)).ToString());
         lastGridObject = grid.GetGridObject(worldPos);
         
         
         if (lastGridObject != null)
         {
-            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out x, out y);
-          //  Debug.Log("Pos:" + UtilsClass.GetMouseWorldPosition() + " within " + x + "," + y);
-           // lastGridObject.Show();
+            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out x, out y);          
         }
     }
 
@@ -169,7 +165,6 @@ public class HexGrid : MonoBehaviour
     {
         if (tile.GetComponent<DisplayTile>())
         {
-            Debug.Log("Showing tile");
             tile.GetComponent<DisplayTile>().Show(true);
         }
     }
@@ -183,19 +178,6 @@ public class MapGridObject
     int x, y;
     public GameObject visualTransform;
     
-    //public void Show()
-    //{
-    //    visualTransform.Find("Selected").gameObject.SetActive(true);
-    //    visualTransform.Find("Hex").gameObject.SetActive(false);
-    //    //Debug.Log("Showing cell");
-    //}
-
-    //public void Hide()
-    //{
-    //    visualTransform.Find("Selected").gameObject.SetActive(false);
-    //    visualTransform.Find("Hex").gameObject.SetActive(true);
-    //}
-
     public MapGridObject(GridSystem<MapGridObject> grid, int x, int y)
     {
         this.grid = grid;

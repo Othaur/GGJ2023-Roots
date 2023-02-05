@@ -20,7 +20,6 @@ public class TestHexagonPoint: MonoBehaviour
     private void Update()
     {
         Vector3 testPosition = UtilsClass.GetMouseWorldPosition();
-        //Debug.Log("Mouse: " + testPosition.ToString() );
         mouseMeshRenderer.material = redMat;
 
         bool inside = true;
@@ -33,39 +32,26 @@ public class TestHexagonPoint: MonoBehaviour
                 {
 
                     Vector3 dirFromURtoUC = hex.upperCorner - hex.upperRightCorner;
-                    //Debug.Log("Before:" + dirFromURtoUC);
                     Vector3 dotDirUR = UtilsClass.ApplyRotationToVector(dirFromURtoUC, 90);
-                    //Debug.Log("After:" + dotDirUR);
-
+                    
                     Vector3 dirToTestPoint = testPosition - hex.upperRightCorner;
                     float dotUR = Vector3.Dot(dotDirUR.normalized, dirToTestPoint.normalized);
-
-                    Debug.DrawLine(hex.upperCorner, testPosition, Color.magenta);
-                    Debug.DrawLine(hex.upperRightCorner, hex.upperRightCorner + dotDirUR, Color.yellow);
-
+                                        
                     Vector3 dirFromULtoUC = hex.upperCorner - hex.upperLeftCorner;
                     Vector3 dotDirUL = UtilsClass.ApplyRotationToVector(dirFromULtoUC, -90);
                     dirToTestPoint = testPosition - hex.upperLeftCorner;
                     float dotUL = Vector3.Dot(dotDirUL.normalized, dirToTestPoint.normalized);
-                    Debug.DrawLine(hex.upperCorner, dotDirUL, Color.white);
-                    Debug.DrawLine(hex.upperLeftCorner, hex.upperLeftCorner + dotDirUL, Color.yellow);
-
+                 
                     Vector3 dirFromLRtoLC = hex.lowerCorner - hex.lowerRightCorner;
                     Vector3 dotDirLR = UtilsClass.ApplyRotationToVector(dirFromLRtoLC,-90);
                     dirToTestPoint = testPosition - hex.lowerRightCorner;
                     float dotLR = Vector3.Dot(dotDirLR.normalized, dirToTestPoint.normalized);
-                    Debug.DrawLine(hex.lowerCorner, hex.lowerCorner + dotDirLR, Color.white);
-                    Debug.DrawLine(hex.lowerRightCorner, hex.lowerRightCorner + dotDirLR, Color.blue);
-                    Debug.DrawLine(hex.lowerRightCorner, hex.lowerRightCorner + dotDirLR, Color.yellow);
-
+                
                     Vector3 dirFromLLtoLC = hex.lowerCorner - hex.lowerLeftCorner;
                     Vector3 dotDirLL = UtilsClass.ApplyRotationToVector(dirFromLLtoLC, 90);
                     dirToTestPoint = testPosition - hex.lowerLeftCorner;
                     float dotLL = Vector3.Dot(dotDirLL.normalized, dirToTestPoint.normalized);
-                    Debug.DrawLine(hex.lowerCorner, testPosition, Color.magenta);
-                    Debug.DrawLine(hex.lowerCorner, dotDirLL, Color.white);
-                    Debug.DrawLine(hex.lowerLeftCorner, hex.lowerLeftCorner + dotDirLL, Color.yellow);
-
+               
                     if (dotUR> 0 && dotUL > 0 && dotLR > 0 && dotLL > 0)
                     {
                         mouseMeshRenderer.material = greenMat;
