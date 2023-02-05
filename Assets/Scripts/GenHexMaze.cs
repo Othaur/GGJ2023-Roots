@@ -15,6 +15,8 @@ public class GenHexMaze
     public List<MazeNode> GenerateMaze(HexGrid grid, Vector2Int startPos)
     {
         int i, j;
+        int nodeIndex;
+        int nodeCount;
 
         int width = grid.Width;
         int height = grid.Height;
@@ -22,6 +24,7 @@ public class GenHexMaze
         List<MazeNode> nodes = new List<MazeNode>();
         List<MazeNode> pathList = new List<MazeNode>();
         List<MazeNode> wallList = new List<MazeNode>();
+        List<Vector3Int> neighbours = new List<Vector3Int>();
 
         MazeNode startNode;
         // Make everything a wall
@@ -44,32 +47,89 @@ public class GenHexMaze
         }
 
         // Add start node to path list and neighbours to wall list                
-        List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
+        neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);       
         foreach (var neighbour in neighbours)
         {
-            int index = neighbour.x + (neighbour.y * height);
+            int index = neighbour.x + (neighbour.y * width);
+            Debug.Log("Index: " + index + " from " + neighbour.x + "," + neighbour.y);
             if (nodes[index].State == GroundState.Wall)
             {
                 Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
+                //nodes[index].State = GroundState.Wall;
                 wallList.Add(nodes[index]);
             }
         }
 
-        while(wallList.Count > 0)
+        while (wallList.Count > 0 || wallList.Count > 50)
         {
-            Debug.Log("path: " + pathList.Count + " wall: " + wallList.Count);
-            MazeNode current = wallList[0];
-            wallList.RemoveAt(0);
-            current.State = GroundState.Empty;
+            Debug.Log("Wall count: " + wallList.Count);
+            int newIndex = Random.Range(0, wallList.Count);
+            MazeNode current = wallList[newIndex];
 
-            int index = current.X + (current.Y * height);
+            // Get neighbours
+            neighbours.Clear();
+            neighbours = grid.GetCellNeighbours(current.X, current.Y);
+            // Check if only one neighbour is empty
+            nodeCount = 0;
+            foreach (var n in neighbours)
+            {
+                nodeIndex = n.x + (n.y * width);
+                if (nodes[nodeIndex].State == GroundState.Empty || nodes[nodeIndex].State == GroundState.Start)
+                {
+                    nodeCount++;
+                }
+                else
+                {
 
-            nodes[index] = current;
+                    if (!wallList.Contains(nodes[nodeIndex]))
+                    {
+                        Debug.Log("Wall to add");
+                       // wallList.Add(nodes[nodeIndex]);
+                    }
+                }
+            }
+            // If only one neighbout was empty add to path
+            Debug.Log("Neighbour count: " + nodeCount + " of " + neighbours.Count);
+            if (nodeCount == 1)
+            {
+                current.State = GroundState.Empty;
+                pathList.Add(current);
+
+                foreach (var n in neighbours)
+                {
+                    nodeIndex = n.x + (n.y * width);
+                    if (nodes[nodeIndex].State == GroundState.Wall)
+
+                        if (!wallList.Contains(nodes[nodeIndex]))
+                        {
+                            Debug.Log("Wall to add");
+                             wallList.Add(nodes[nodeIndex]);
+                        }
+                }
+            }
+            
+            //DisplayList(wallList);
+            wallList.RemoveAt(newIndex);
+
+            nodeIndex = current.X + (current.Y * width);
+
+            nodes[nodeIndex] = current;
             pathList.Add(current);
 
         }
 
+      //  Debug.Log("Nodes list: " + nodes.Count);
+      //  DisplayList(nodes);
         return nodes;
+    }
+
+
+    void DisplayList(List<MazeNode> list)
+    {
+        foreach(var i in list)
+        {
+            Debug.Log("node: " + i.X + "," + i.Y +" -> " + i.State);
+        }
     }
 }
 
