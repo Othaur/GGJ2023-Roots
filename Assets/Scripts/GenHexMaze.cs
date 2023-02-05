@@ -42,7 +42,7 @@ public class GenHexMaze
             }
         }
 
-        // Add start node to path list and rest to wall list
+        // Add start node to path list and neighbours to wall list
         List<Vector3Int> neighbours = grid.GetCellNeighbours(startPos.x, startPos.y);
         foreach (var neighbour in neighbours)
         {
@@ -50,9 +50,11 @@ public class GenHexMaze
             if (nodes[index].State == GroundState.Wall)
             {
                 Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
+                wallList.Add(nodes[index]);
             }
         }
 
+        while()
 
         return nodes;
     }
