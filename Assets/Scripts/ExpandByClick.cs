@@ -11,11 +11,11 @@ public class ExpandByClick : MonoBehaviour
 
     Camera cam;
 
-    [field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
+    //[field: SerializeField, Range(0, 10f)]public float Increment {get; private set;} = 1f;
     [field: SerializeField, Range(0, 10f)]public float Width {get; private set;} = 1f;
     [field: SerializeField, Range(1f, 100f)]public float Buffer {get; private set;} = 10f;
 
-    public Transform Target;
+    // public Transform Target;
 
     // Start is called before the first frame update
     void Start()
@@ -25,17 +25,7 @@ public class ExpandByClick : MonoBehaviour
 
         //ExtendMesh(Target.position);
     }
-
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
-            Target.position = mousePosition;
-            ExtendMesh(Target.position);
-        }
-    }
-
+    
     void InitializeMesh()
     {
 
@@ -85,7 +75,7 @@ public class ExpandByClick : MonoBehaviour
             }
         }
 
-
+        Debug.Log("Target Position" + target);
         // Debug.Log("Closest position: " + vertices[c]);
         // Debug.Log("Closest index: " + c);
         // Debug.Log("2nd Closest position: " + vertices[c2]);
@@ -117,37 +107,27 @@ public class ExpandByClick : MonoBehaviour
             t1 = c2;
         }
 
-        Debug.Log("Cross Product: " + crossProduct);
+        //Debug.Log("Cross Product: " + crossProduct);
 
         Vector3 mid = MidpointBetween(updatedVertices[t0], updatedVertices[t1]);
         Vector3 dir = DirectionBetween(mid, target);
         Vector3 t2V = target + GetPerpendicularVector(mid - target) * -Width/2f;
         Vector3 t3V = target + GetPerpendicularVector(mid - target) * Width/2f;
 
-
         Debug.DrawLine(target, mid, Color.yellow, 5f);
         Debug.DrawLine(target, t2V, Color.green, 5f);
         Debug.DrawLine(target, t3V, Color.red, 5f);
-
-
-        //updatedVertices.Add(target);
+                
         updatedVertices.Add(t2V);
         updatedVertices.Add(t3V);
 
-        //updatedUVs.Add(new Vector2(target.x , target.y));
         updatedUVs.Add(new Vector2(t2V.x, t2V.y));
         updatedUVs.Add(new Vector2(t3V.x, t3V.y));
 
         updatedTriangles.Add(t0);
         updatedTriangles.Add(t1);
-        //updatedTriangles.Add(updatedVertices.IndexOf(target));
+        updatedTriangles.Add(updatedVertices.IndexOf(target));
         updatedTriangles.Add(updatedVertices.IndexOf(t3V));
-
-        updatedTriangles.Add(t1);
-        updatedTriangles.Add(updatedVertices.IndexOf(t2V));
-        updatedTriangles.Add(updatedVertices.IndexOf(t3V));
-        
-
 
         mesh.Clear();
 
