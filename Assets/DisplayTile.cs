@@ -22,8 +22,7 @@ public class DisplayTile : MonoBehaviour
     }
 
     public void Show(bool state)
-    {
-        Debug.Log("Setting to " + state);
+    {        
         shown.SetActive(state);
         hidden.SetActive(!state);
         visible = state;

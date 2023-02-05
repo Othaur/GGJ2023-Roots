@@ -38,7 +38,6 @@ public class GenHexMaze
                 if (i == startPos.x && j == startPos.y)
                 {
                     temp.State = GroundState.Start;
-                    Debug.Log("Start:" + i + "," + j);
                     startNode = temp;
                     pathList.Add(startNode);
                 }
@@ -51,18 +50,14 @@ public class GenHexMaze
         foreach (var neighbour in neighbours)
         {
             int index = neighbour.x + (neighbour.y * width);
-            Debug.Log("Index: " + index + " from " + neighbour.x + "," + neighbour.y);
             if (nodes[index].State == GroundState.Wall)
             {
-                Debug.Log("AAAAAAHAHHH " + neighbour.x + "," + neighbour.y);
-                //nodes[index].State = GroundState.Wall;
                 wallList.Add(nodes[index]);
             }
         }
 
         while (wallList.Count > 0 || wallList.Count > 50)
         {
-            Debug.Log("Wall count: " + wallList.Count);
             int newIndex = Random.Range(0, wallList.Count);
             MazeNode current = wallList[newIndex];
 
@@ -78,18 +73,8 @@ public class GenHexMaze
                 {
                     nodeCount++;
                 }
-                else
-                {
-
-                    if (!wallList.Contains(nodes[nodeIndex]))
-                    {
-                        Debug.Log("Wall to add");
-                       // wallList.Add(nodes[nodeIndex]);
-                    }
-                }
             }
             // If only one neighbout was empty add to path
-            Debug.Log("Neighbour count: " + nodeCount + " of " + neighbours.Count);
             if (nodeCount == 1)
             {
                 current.State = GroundState.Empty;
@@ -102,13 +87,11 @@ public class GenHexMaze
 
                         if (!wallList.Contains(nodes[nodeIndex]))
                         {
-                            Debug.Log("Wall to add");
                              wallList.Add(nodes[nodeIndex]);
                         }
                 }
             }
-            
-            //DisplayList(wallList);
+                        
             wallList.RemoveAt(newIndex);
 
             nodeIndex = current.X + (current.Y * width);
@@ -118,8 +101,6 @@ public class GenHexMaze
 
         }
 
-      //  Debug.Log("Nodes list: " + nodes.Count);
-      //  DisplayList(nodes);
         return nodes;
     }
 
